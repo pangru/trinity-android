@@ -1,8 +1,11 @@
 package com.jinsa.trinity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,14 +21,30 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private MessagingManager manager;
 
-    @Override
+    private RecyclerView notificationView;
+    private RecyclerView.Adapter notificationAdapter;
+    private RecyclerView.LayoutManager nLayoutManager;
+    private List<String> nDataset = new ArrayList<>();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationView = (RecyclerView) findViewById(R.id.notification_view);
+        notificationView.setHasFixedSize(true);
+        nLayoutManager = new LinearLayoutManager(this);
+        notificationView.setLayoutManager(nLayoutManager);
+
+        notificationAdapter = new NotificationAdapter(nDataset);
+        notificationView.setAdapter(notificationAdapter);;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,6 +65,21 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        manager = MessagingManager.getInstance(MainActivity.this);
+        manager.registerListener(new MessagingManager.Listener() {
+            @Override
+            public String onMessageReceived(String message) {
+                nDataset.add(message);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notificationAdapter.notifyDataSetChanged();
+                    }
+                });
+                return null;
+            }
+        });
     }
 
     @Override
@@ -87,15 +121,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_manage) {
-            String pushId = FirebaseInstanceId.getInstance().getToken();
-            String deviceId = PlatformUtil.getDeviceId(MainActivity.this);
-            try {
-                HttpProxy.register(deviceId, pushId);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String pushId = FirebaseInstanceId.getInstance().getToken();
+                    String deviceId = PlatformUtil.getDeviceId(MainActivity.this);
+                    try {
+                        HttpProxy.register(deviceId, pushId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

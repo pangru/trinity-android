@@ -16,8 +16,10 @@ import java.io.IOException;
 
 public class TrinityMessagingService extends FirebaseMessagingService {
     private final static String TAG = TrinityMessagingService.class.getSimpleName();
+    private static MessagingManager manager;
 
     public TrinityMessagingService() {
+        manager = MessagingManager.getInstance(TrinityMessagingService.this);
     }
 
     @Override
@@ -30,5 +32,6 @@ public class TrinityMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "onMessageReceived: remoteMessage=" + remoteMessage.getData());
         JSONObject payload = new JSONObject(remoteMessage.getData());
+        manager.receiveMessage(payload.toString());
     }
 }
