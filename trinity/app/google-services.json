@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "127707419139",
+    "firebase_url": "https://trinity-9fda9.firebaseio.com",
+    "project_id": "trinity-9fda9",
+    "storage_bucket": "trinity-9fda9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127707419139:android:31eed10ff2c636e3",
+        "android_client_info": {
+          "package_name": "com.jinsa.trinity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127707419139-lfacer2m97klj1h81l7rt7u0u2a433f0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jinsa.trinity",
+            "certificate_hash": "178F6EB6609C8DF58F81C22F49F887764AA36E80"
+          }
+        },
+        {
+          "client_id": "127707419139-kfv781g5g1s0a9n04i28urtvtpr17rbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbD1Ml66gljotMLHPfvSz5o610TXu_1k0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127707419139-kfv781g5g1s0a9n04i28urtvtpr17rbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
